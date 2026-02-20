@@ -1,0 +1,300 @@
+/* style landing page */
+/* Tema Dark Blue Custom */
+:root {
+    --dark-blue-main: #0a192f;
+    --dark-blue-sec: #112240;
+    --accent-blue: #64ffda;
+    --text-main: #ccd6f6;
+    --text-sec: #8892b0;
+}
+
+/* Gaya Body Umum (Bisa di-scroll, untuk Landing Page) */
+body {
+    background-color: var(--dark-blue-main);
+    color: var(--text-main);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+}
+
+/* Navbar */
+.navbar {
+    background-color: rgba(10, 25, 47, 0.95);
+    backdrop-filter: blur(10px);
+}
+.navbar-brand {
+    color: var(--text-main) !important;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+.brand-ai {
+    color: var(--accent-blue);
+}
+
+/* Hero Section */
+.hero-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 80px; /* offset navbar */
+}
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 20px;
+}
+.hero-subtitle {
+    color: var(--text-sec);
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+.btn-custom-primary {
+    background-color: transparent;
+    color: var(--accent-blue);
+    border: 2px solid var(--accent-blue);
+    padding: 12px 30px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+.btn-custom-primary:hover {
+    background-color: rgba(100, 255, 218, 0.1);
+    color: var(--accent-blue);
+    transform: translateY(-2px);
+}
+
+/* About Section */
+.about-section {
+    background-color: var(--dark-blue-sec);
+    padding: 80px 0;
+}
+.section-title {
+    color: var(--text-main);
+    font-weight: 700;
+    margin-bottom: 40px;
+    position: relative;
+    display: inline-block;
+}
+.section-title::after {
+    content: '';
+    position: absolute;
+    width: 50%;
+    height: 2px;
+    background-color: var(--accent-blue);
+    bottom: -10px;
+    left: 25%;
+}
+
+/* Tools Section */
+.tools-section {
+    padding: 80px 0;
+}
+.tool-card {
+    background-color: var(--dark-blue-sec);
+    border: 1px solid #233554;
+    border-radius: 12px;
+    padding: 30px;
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+.tool-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--accent-blue);
+}
+.tool-icon {
+    font-size: 2.5rem;
+    color: var(--accent-blue);
+    margin-bottom: 15px;
+}
+
+/* Footer */
+.footer {
+    background-color: #020c1b;
+    padding: 30px 0;
+    color: var(--text-sec);
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+/* Responsive Adjustments untuk Layar HP */
+@media (max-width: 768px) {
+    .hero-section {
+        text-align: center;
+        padding-top: 120px; /* Memberi ruang agar tidak menabrak navbar */
+        padding-bottom: 60px;
+    }
+    .hero-title {
+        font-size: 2.2rem; /* Mengecilkan ukuran font judul utama */
+        margin-bottom: 15px;
+    }
+    .hero-subtitle {
+        font-size: 1rem; /* Mengecilkan ukuran font subjudul */
+        margin-bottom: 25px;
+    }
+    .bi-chat-quote {
+        font-size: 10rem !important; /* Mengecilkan ikon raksasa di hero section */
+        margin-top: 30px;
+    }
+    .section-title {
+        font-size: 1.8rem;
+    }
+    .tool-card {
+        padding: 20px; /* Mengurangi padding card agar tidak terlalu sesak */
+    }
+}
+
+
+/* style halaman chat */
+/* Tema Dark Blue Custom */
+:root {
+    --dark-blue-main: #0a192f;
+    --dark-blue-sec: #112240;
+    --accent-blue: #64ffda;
+    --text-main: #ccd6f6;
+    --text-sec: #8892b0;
+    --border-color: #233554;
+}
+
+/* KUNCI PERBAIKAN: Memaksa tinggi layar 100% penuh */
+/* Class KHUSUS untuk mengunci layar di Halaman Chat */
+.chat-body {
+    height: 100vh; /* Kunci tinggi layar */
+    overflow: hidden; /* Matikan scroll body utama */
+}
+
+/* Sidebar Kiri */
+.sidebar {
+    width: 280px;
+    background-color: var(--dark-blue-sec);
+    border-right: 1px solid var(--border-color);
+}
+.brand-ai {
+    color: var(--accent-blue);
+}
+
+/* Tombol Custom */
+.btn-custom-outline {
+    background-color: transparent;
+    color: var(--accent-blue);
+    border: 1px solid var(--accent-blue);
+    transition: all 0.3s ease;
+}
+.btn-custom-outline:hover {
+    background-color: rgba(100, 255, 218, 0.1);
+    color: var(--accent-blue);
+}
+.btn-custom-fill {
+    background-color: var(--accent-blue);
+    color: var(--dark-blue-main);
+    font-weight: 600;
+    border: none;
+    transition: all 0.3s ease;
+}
+.btn-custom-fill:hover {
+    background-color: #52e0c4;
+    color: var(--dark-blue-main);
+}
+
+/* Area Obrolan Utama */
+.chat-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Memaksa container obrolan setinggi layar penuh */
+    background-color: var(--dark-blue-main);
+}
+
+.chat-messages {
+    flex: 1 1 auto; /* Membuat ruang pesan melar mengisi kekosongan */
+    overflow-y: auto;
+    padding: 2rem;
+}
+
+/* Gelembung Pesan */
+.message-bubble {
+    max-width: 75%;
+    padding: 12px 18px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+.message-user {
+    background-color: rgba(100, 255, 218, 0.05);
+    border: 1px solid var(--accent-blue);
+    color: var(--text-main);
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+.message-ai {
+    background-color: var(--dark-blue-sec);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+
+/* Area Input Text */
+.chat-input-area {
+    flex-shrink: 0; /* Mencegah area input menyusut */
+    padding: 20px;
+    background-color: var(--dark-blue-main);
+    border-top: 1px solid var(--border-color);
+}
+.input-box {
+    background-color: var(--dark-blue-sec);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    padding-right: 60px;
+    resize: none;
+}
+.input-box:focus {
+    background-color: var(--dark-blue-sec);
+    color: var(--text-main);
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 0.25rem rgba(100, 255, 218, 0.25);
+}
+.input-box::placeholder {
+    color: var(--text-sec);
+}
+.btn-send {
+    position: absolute;
+    right: 30px;
+    bottom: 25px;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--dark-blue-main); }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-sec); }
+
+/* Modal Dark Theme */
+.modal-content {
+    background-color: var(--dark-blue-sec);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+}
+.modal-header { border-bottom: 1px solid var(--border-color); }
+.btn-close { filter: invert(1) grayscale(100%) brightness(200%); }
+.form-control-dark {
+    background-color: var(--dark-blue-main);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+}
+.form-control-dark:focus {
+    background-color: var(--dark-blue-main);
+    color: var(--text-main);
+    border-color: var(--accent-blue);
+    box-shadow: none;
+}
+
+.text-sec-custom { color: var(--text-sec) !important; }
+.border-bottom-custom { border-bottom: 1px solid var(--border-color) !important; }
