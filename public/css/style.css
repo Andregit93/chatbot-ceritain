@@ -35,7 +35,7 @@ body {
     min-height: 100vh;
     display: flex;
     align-items: center;
-    padding-top: 80px; /* offset navbar */
+    padding-top: 40px; /* offset navbar */
 }
 .hero-title {
     font-size: 3.5rem;
@@ -79,11 +79,11 @@ body {
 .section-title::after {
     content: '';
     position: absolute;
-    width: 50%;
+    width: 100%;
     height: 2px;
     background-color: var(--accent-blue);
     bottom: -10px;
-    left: 25%;
+    left: 0%;
 }
 
 /* Tools Section */
@@ -103,7 +103,7 @@ body {
     border-color: var(--accent-blue);
 }
 .tool-icon {
-    font-size: 2.5rem;
+    font-size: 4rem;
     color: var(--accent-blue);
     margin-bottom: 15px;
 }
@@ -121,8 +121,8 @@ body {
 @media (max-width: 768px) {
     .hero-section {
         text-align: center;
-        padding-top: 120px; /* Memberi ruang agar tidak menabrak navbar */
-        padding-bottom: 60px;
+        padding-top: 40px; /* Memberi ruang agar tidak menabrak navbar */
+        padding-bottom: 40px;
     }
     .hero-title {
         font-size: 2.2rem; /* Mengecilkan ukuran font judul utama */

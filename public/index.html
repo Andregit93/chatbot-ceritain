@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ceritAIn - Teman Curhat AI Kamu</title>
+    <title>ceritAIn</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://kit.fontawesome.com/54f6d9c1f2.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -18,14 +19,18 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link text-light px-3" href="#about">Tentang</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-light px-3" href="#tools">Teknologi</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
-                        <a href="chat.html" class="btn btn-custom-primary btn-sm px-4 py-2">Mulai Konsultasi</a>
+                        <a href="login.html" class="btn btn-custom-primary btn-sm px-4 py-2">
+                            <i class="fa-solid fa-arrow-right-to-bracket" style="color: #64ffda;"></i>
+                            MASUK
+                        </a>
+                        
                     </li>
                 </ul>
             </div>
@@ -36,12 +41,13 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6 order-2 order-lg-1 mt-5 mt-lg-0">
-                    <h1 class="hero-title">Ruang Aman untuk <br>Bercerita.</h1>
+                    <h1 class="hero-title">Ruang Aman untuk <br>Kamu Bercerita</h1>
                     <p class="hero-subtitle">
                         ceritAIn hadir sebagai pendamping virtual untuk mendengarkan keluh kesahmu kapan saja. Langkah awal yang tepat untuk mengenali kondisi emosionalmu sebelum mencari bantuan profesional.
                     </p>
-                    <a href="chat.html" class="btn btn-custom-primary btn-lg">
-                        Coba ceritAIn Sekarang <i class="bi bi-arrow-right ms-2"></i>
+                    <a href="chat.html" class="btn btn-custom-primary btn-lg" target="_blank">
+                        Coba ceritAIn Sekarang
+                        <i class="fa-solid fa-arrow-up-right-from-square ps-1" style="color: #64ffda;"></i>
                     </a>
                 </div>
                 <div class="col-lg-6 order-1 order-lg-2 text-center">
@@ -57,7 +63,7 @@
             <div class="row justify-content-center mt-5">
                 <div class="col-lg-8">
                     <p class="fs-5 text-sec" style="color: var(--text-sec); line-height: 1.8;">
-                        ceritAIn adalah *chatbot* konsultasi kesehatan mental berbasis *Generative AI*. 
+                        ceritAIn adalah <strong>chatbot</strong> konsultasi kesehatan mental berbasis <strong>Generative AI</strong>. 
                         Sistem ini dirancang khusus untuk memahami konteks percakapan bahasa Indonesia yang empatik, santai, dan bebas stigma. 
                         ceritAIn bertindak sebagai pendukung awal non-klinis untuk memvalidasi perasaanmu dan memberikan psikoedukasi ringan, menjaga keamanan pengguna sebagai prioritas utama.
                     </p>
@@ -68,33 +74,35 @@
 
     <section class="tools-section" id="tools">
         <div class="container">
-            <h2 class="section-title text-center mb-5 d-block">Dibangun dengan Teknologi Modern</h2>
+            <div class="text-center">
+                <h2 class="section-title text-center mb-5">Development Tools</h2>
+            </div>
             <div class="row g-4 mt-3">
                 <div class="col-md-6 col-lg-3">
                     <div class="tool-card text-center">
-                        <i class="bi bi-robot tool-icon"></i>
-                        <h4 class="mb-3 text-light">Gemini AI</h4>
-                        <p style="color: var(--text-sec);">Menggunakan model Generative AI Gemini melalui arsitektur LangChain untuk pemrosesan bahasa alami yang koheren.</p>
+                        <i class="fa-solid fa-robot tool-icon"></i>
+                        <h4 class="mb-3 text-light">Gemini 2.5 Flash</h4>
+                        <p style="color: var(--text-sec);">Menggunakan model Generative AI Gemini melalui arsitektur LangChain untuk pemrosesan bahasa alami.</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="tool-card text-center">
-                        <i class="bi bi-server tool-icon"></i>
+                        <i class="fa-solid fa-server tool-icon"></i>
                         <h4 class="mb-3 text-light">Node.js & Express</h4>
-                        <p style="color: var(--text-sec);">Backend tangguh dan cepat untuk menangani *request* secara asinkronus dan mengelola *endpoint* API.</p>
+                        <p style="color: var(--text-sec);">Backend untuk menangani request secara asyncrhonous dan mengelola endpoint API.</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="tool-card text-center">
-                        <i class="bi bi-database-fill tool-icon"></i>
+                        <i class="fa-solid fa-database tool-icon"></i>
                         <h4 class="mb-3 text-light">PostgreSQL</h4>
-                        <p style="color: var(--text-sec);">Penyimpanan *database* relasional yang andal dengan Supabase untuk mengelola memori sesi percakapan secara aman.</p>
+                        <p style="color: var(--text-sec);">Database relasional yang andal dengan Supabase untuk mengelola memori sesi percakapan secara aman.</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="tool-card text-center">
-                        <i class="bi bi-bootstrap-fill tool-icon"></i>
-                        <h4 class="mb-3 text-light">Bootstrap 5</h4>
+                        <i class="fa-brands fa-bootstrap tool-icon"></i>
+                        <h4 class="mb-3 text-light">Bootstrap</h4>
                         <p style="color: var(--text-sec);">Framework antarmuka yang memastikan tampilan ceritAIn responsif dan mulus diakses lewat laptop maupun ponsel.</p>
                     </div>
                 </div>
@@ -104,7 +112,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p class="mb-0">&copy; 2026 ceritAIn. Dirancang untuk skripsi dan pengembangan layanan kesehatan mental di Indonesia.</p>
+            <p class="mb-0">&copy; 2026 ceritAIn</p>
         </div>
     </footer>
 

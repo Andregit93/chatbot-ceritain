@@ -2,14 +2,14 @@ const { ChatGoogleGenerativeAI } = require("@langchain/google-genai");
 const { ChatPromptTemplate, MessagesPlaceholder } = require("@langchain/core/prompts");
 const { HumanMessage, AIMessage } = require("@langchain/core/messages");
 
-// 1. Inisialisasi Model Gemini
+// Inisialisasi Model Gemini
 const llm = new ChatGoogleGenerativeAI({
     model: "gemini-2.5-flash",
     temperature: 0.7, // Suhu ini memberikan keseimbangan antara respons yang empatik dan tetap terarah
     apiKey: process.env.GEMINI_API_KEY
 });
 
-// 2. Role-Based Prompt Engineering (Sesuai Konsep Skripsi)
+// Role-Based Prompt Engineering
 const prompt = ChatPromptTemplate.fromMessages([
     [
         "system",
@@ -27,11 +27,11 @@ const prompt = ChatPromptTemplate.fromMessages([
 
 const chain = prompt.pipe(llm);
 
-// 3. Fungsi Utama Pemrosesan Chat & Manajemen Memori Supabase
+// Fungsi Pemrosesan Chat & Manajemen Memori Supabase
 async function processChat(supabase, sessionId, userId, userMessage) {
     let chatHistory = [];
 
-    // A. Tarik riwayat chat JIKA user sudah login
+    // Tarik riwayat chat JIKA user sudah login
     if (userId && sessionId) {
         const { data, error } = await supabase
             .from('chat_messages')
@@ -48,26 +48,24 @@ async function processChat(supabase, sessionId, userId, userMessage) {
         }
     }
 
-    // B. Kirim riwayat dan pesan baru ke Gemini
+    // Kirim riwayat dan pesan baru ke Gemini
     const response = await chain.invoke({
         chat_history: chatHistory,
         input: userMessage
     });
 
-    // C. Simpan data ke Supabase JIKA user sudah login
+    // Simpan data ke Supabase JIKA user sudah login
     if (userId && sessionId) {
-        // --- TAMBAHAN BARU: Cek & Buat Sesi Otomatis ---
-        // --- Cek & Buat Sesi Otomatis ---
+        // Cek & Buat Sesi Otomatis
         const { data: sessionData, error: sessionError } = await supabase
             .from('chat_sessions')
             .select('session_id')
             .eq('session_id', sessionId)
             .single();
 
-        // Jika sesi belum ada di database, buat baru!
+        // Jika sesi belum ada di database, buat baru
         if (!sessionData) {
-            // FITUR BARU: Buat judul dari pesan pertama user
-            // Potong maksimal 30 karakter agar rapi di sidebar
+            // Buat judul dari pesan pertama user
             const generatedTitle = userMessage.length > 30 
                 ? userMessage.substring(0, 30) + "..." 
                 : userMessage;

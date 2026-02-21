@@ -1,7 +1,7 @@
-// Konfigurasi URL Backend ceritAIn
+// Konfigurasi URL Backend 
 const API_URL = 'http://localhost:3000/api';
 
-// --- UTILITIES ---
+// UTILITIES
 const getUser = () => JSON.parse(localStorage.getItem('ceritAIn_user'));
 const saveUser = (user) => localStorage.setItem('ceritAIn_user', JSON.stringify(user));
 const logout = () => {
@@ -12,8 +12,7 @@ const logout = () => {
 // Pembuat ID Sesi Acak
 const generateSessionId = () => 'sesi-' + Date.now() + '-' + Math.random().toString(36).substring(2, 9);
 
-// Efek Mengetik Perkata (Streaming Style) dengan Support Bold & Line Break
-const typeWriter = (element, text, speed = 40) => { // Speed ditingkatkan (lebih lambat)
+const typeWriter = (element, text, speed = 60) => {
     let i = 0;
     let formattedText = text
         .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>') 
@@ -30,11 +29,10 @@ const typeWriter = (element, text, speed = 40) => { // Speed ditingkatkan (lebih
                 const chatWindow = document.getElementById('chatWindow');
                 if (chatWindow) chatWindow.scrollTop = chatWindow.scrollHeight;
                 
-                // Logika jeda dinamis: Jika ada tanda baca, berikan jeda sedikit lebih lama
                 let lastWord = words[i-1];
                 let extraPause = 0;
                 if (lastWord.endsWith('.') || lastWord.endsWith('?') || lastWord.endsWith('!')) {
-                    extraPause = 200; // Jeda 0.2 detik di akhir kalimat agar natural
+                    extraPause = 200;
                 }
 
                 setTimeout(type, speed + extraPause);
@@ -55,9 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const userInput = document.getElementById('userInput');
     const btnSend = document.getElementById('btnSend');
 
-    // ==========================================
-    // 1. LOGIKA HALAMAN REGISTER (Auto-Login)
-    // ==========================================
+    
+    // REGISTER
     const registerForm = document.getElementById('registerForm');
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
@@ -80,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
                 
                 if (response.ok) {
-                    saveUser(data.user); // Auto-login
+                    saveUser(data.user);
                     Swal.fire({
                         icon: 'success',
                         title: 'Berhasil!',
@@ -97,9 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ==========================================
-    // 2. LOGIKA HALAMAN LOGIN
-    // ==========================================
+    // LOGIN
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
@@ -128,24 +123,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ==========================================
-    // 3. LOGIKA HALAMAN CHAT
-    // ==========================================
+    // CHAT
     if (chatWindow && userInput && btnSend) {
         let currentSessionId = generateSessionId();
 
-        // Tampilkan Profil jika sudah login
         if (user) {
             authArea.innerHTML = `
                 <div class="d-flex flex-column align-items-center w-100">
-                    <span class="text-light fw-bold mb-3 small"><i class="bi bi-person-circle me-2 text-primary"></i>${user.username}</span>
-                    <button id="btnLogout" class="btn btn-sm btn-outline-danger w-100 rounded-pill">Keluar Akun</button>
+                    <span class="text-light fw-bold mb-3 small"><i class="fa-solid fa-circle-user me-2" style="color: rgb(255, 255, 255);"></i>${user.username}</span>
+                    <button id="btnLogout" class="btn btn-sm btn-outline-danger w-100 rounded-pill">Log out</button>
                 </div>
             `;
             document.getElementById('btnLogout').addEventListener('click', logout);
             if (guestMessage) guestMessage.classList.add('d-none');
             
-            // FUNGSI LOAD SESSION (History di Sidebar)
             const loadSessions = async () => {
                 const res = await fetch(`${API_URL}/sessions/${user.id}`);
                 const data = await res.json();
@@ -156,8 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         li.className = 'nav-item mb-2';
                         li.innerHTML = `
                             <a href="#" class="nav-link btn-session p-2" data-id="${s.session_id}" style="background: rgba(100,255,218,0.05); color: var(--text-main); border-radius: 10px; font-size: 0.85rem;">
-                                <i class="bi bi-chat-dots me-2" style="color: var(--accent-blue);"></i>
-                                <span class="text-truncate d-inline-block" style="max-width: 150px;">${s.title}</span>
+                                <span class="text-truncate d-inline-block ps-2" style="max-width: 150px;">${s.title}</span>
                             </a>`;
                         historyList.appendChild(li);
                     });
@@ -200,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const indicator = document.createElement('div');
             indicator.id = 'loading-ai';
             indicator.className = 'message-bubble message-ai text-sec-custom small';
-            indicator.innerHTML = '<i class="bi bi-stars"></i> ceritAIn sedang merenung...';
+            indicator.innerHTML = '<i class="bi bi-stars"></i> ceritAIn...';
             chatWindow.appendChild(indicator);
             chatWindow.scrollTop = chatWindow.scrollHeight;
 
@@ -236,8 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     li.className = 'nav-item mb-2';
                                     li.innerHTML = `
                                         <a href="#" class="nav-link btn-session p-2" data-id="${s.session_id}" style="background: rgba(100,255,218,0.05); color: var(--text-main); border-radius: 10px; font-size: 0.85rem;">
-                                            <i class="bi bi-chat-dots me-2" style="color: var(--accent-blue);"></i>
-                                            <span class="text-truncate d-inline-block" style="max-width: 150px;">${s.title}</span>
+                                            <span class="text-truncate d-inline-block ps-2" style="max-width: 150px;">${s.title}</span>
                                         </a>`;
                                     historyList.appendChild(li);
                                 });
@@ -275,8 +264,8 @@ document.addEventListener('DOMContentLoaded', () => {
             currentSessionId = generateSessionId();
             chatWindow.innerHTML = `
                 <div class="message-bubble message-ai shadow-sm">
-                    Halo! Saya adalah ceritAIn, pendamping virtual yang siap mendengarkan ceritamu hari ini. Ada yang sedang membebani pikiranmu? <br><br>
-                    <small class="text-sec-custom" style="font-size: 0.8rem;"><i>*Catatan: Saya dirancang sebagai AI pendukung awal dan bukan tenaga medis. Jika kamu merasa sangat tertekan atau berada dalam krisis, mohon segera hubungi tenaga profesional.</i></small>
+                    Halo! Saya merupakan chatbot pendamping virtual yang siap mendengarkan ceritamu hari ini. Ada yang sedang membebani pikiranmu? <br><br>
+                    <small class="text-sec-custom" style="font-size: 0.8rem;"><i>Catatan: Saya dirancang sebagai chatbot pendukung awal dan bukan tenaga medis. Jika kamu merasa sangat tertekan atau berada dalam krisis, mohon segera hubungi tenaga profesional.</i></small>
                 </div>
             `;
         });
