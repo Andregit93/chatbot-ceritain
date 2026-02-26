@@ -3,37 +3,17 @@ const { createClient } = require('@supabase/supabase-js');
 const { ChatGoogleGenerativeAI } = require('@langchain/google-genai');
 const { SystemMessage, HumanMessage, AIMessage } = require('@langchain/core/messages');
 
-// ==========================================
-// 1. INISIALISASI DATABASE & AI MODEL
-// ==========================================
+// Inisialisasi Database
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
-// Menggunakan Gemini 1.5 Flash agar lebih cepat dan kuota gratis lebih lega
+// Inisialisasi Model AI (Menggunakan Flash agar ringan & anti limit)
 const llm = new ChatGoogleGenerativeAI({
-    model: "gemini-1.5-flash", 
+    model: "gemini-2.5-flash", 
     apiKey: process.env.GEMINI_API_KEY,
-    temperature: 0.7, // Disesuaikan agar AI lebih empatik dan natural, tidak terlalu kaku
+    temperature: 0.7, 
 });
 
-// ==========================================
-// 2. SUPER PROMPT (R.O.L.E FRAMEWORK)
-// ==========================================
-// // Role-Based Prompt Engineering
-// const prompt = ChatPromptTemplate.fromMessages([
-//     [
-//         "system",
-//         `Kamu adalah chatbot pendamping konsultasi awal kesehatan mental di Indonesia. 
-//         Tugas utamamu adalah memberikan dukungan emosional awal, psikoedukasi ringan, dan memvalidasi perasaan pengguna dengan bahasa Indonesia yang empatik, santai, dan tidak menghakimi.
-        
-//         BATASAN MUTLAK:
-//         1. Kamu BUKAN psikolog, psikiater, atau tenaga medis profesional.
-//         2. Jangan pernah memberikan diagnosis medis, saran klinis, atau resep obat.
-//         3. Jika pengguna menunjukkan indikasi krisis, gangguan berat, atau niat menyakiti diri sendiri, segera arahkan mereka dengan lembut untuk mencari bantuan profesional (seperti layanan darurat atau psikolog).`
-//     ],
-//     new MessagesPlaceholder("chat_history"),
-//     ["human", "{input}"]
-// ]);
-
+// Super Prompt R.O.L.E Framework
 const systemPrompt = `
 [ROLE]
 Kamu adalah DengarAI, sebuah asisten virtual empatik dan pendamping kesehatan mental non-klinis. Kamu dirancang sebagai ruang aman bagi pengguna untuk bercerita dan meringankan beban pikiran mereka.
@@ -55,81 +35,79 @@ Kamu adalah DengarAI, sebuah asisten virtual empatik dan pendamping kesehatan me
 3. Akhiri balasanmu dengan satu pertanyaan pemantik yang lembut untuk mendorong pengguna bercerita lebih lanjut (contoh: "Pelan-pelan saja, apa yang paling membuatmu merasa berat hari ini?").
 `;
 
-// ==========================================
-// 3. FUNGSI UTAMA PEMROSESAN CHAT
-// ==========================================
 const processChat = async (sessionId, userId, userMessage) => {
     try {
-        // --- A. Manajemen Sesi Dinamis (Supabase) ---
-        if (userId) {
+        // Validasi Keamanan Lapis Pertama
+        if (!userMessage || userMessage.trim() === "") {
+            throw new Error("Pesan pengguna kosong.");
+        }
+
+        // --- A. Penamaan Sesi (History Sidebar) ---
+        if (userId && sessionId) {
             const { data: sessionData } = await supabase
                 .from('chat_sessions')
                 .select('session_id')
                 .eq('session_id', sessionId)
                 .single();
 
-            // Jika sesi baru, buat judul otomatis dari pesan pertama pengguna
             if (!sessionData) {
                 const generatedTitle = userMessage.length > 30 
                     ? userMessage.substring(0, 30) + "..." 
                     : userMessage;
 
-                const { error: insertSessionError } = await supabase
+                await supabase
                     .from('chat_sessions')
                     .insert([{ session_id: sessionId, user_id: userId, title: generatedTitle }]);
-                
-                if (insertSessionError) console.error("Gagal membuat sesi:", insertSessionError.message);
             }
         }
 
-        // --- B. Menarik Riwayat Percakapan (Memory) ---
+        // --- B. Tarik Memori Percakapan ---
         let chatHistory = [new SystemMessage(systemPrompt)];
 
-        if (userId) {
+        if (userId && sessionId) {
             const { data: pastMessages, error: historyError } = await supabase
                 .from('chat_messages')
                 .select('*')
                 .eq('session_id', sessionId)
                 .order('created_at', { ascending: true })
-                .limit(10); // Ambil 10 pesan terakhir saja agar tidak kena limit token Gemini
+                .limit(15); 
 
             if (!historyError && pastMessages) {
                 pastMessages.forEach(msg => {
-                    if (msg.message.role === 'user') {
-                        chatHistory.push(new HumanMessage(msg.message.content));
-                    } else if (msg.message.role === 'ai') {
-                        chatHistory.push(new AIMessage(msg.message.content));
+                    const textContent = msg.message?.content || ""; 
+                    if (textContent.trim() !== "") {
+                        if (msg.message.role === 'user') {
+                            chatHistory.push(new HumanMessage(textContent));
+                        } else if (msg.message.role === 'ai') {
+                            chatHistory.push(new AIMessage(textContent));
+                        }
                     }
                 });
             }
         }
 
-        // Tambahkan pesan terbaru dari pengguna
+        // Masukkan pesan terbaru
         chatHistory.push(new HumanMessage(userMessage));
 
-        // --- C. Eksekusi ke Model AI (LangChain) ---
+        // --- C. Eksekusi AI ---
         const response = await llm.invoke(chatHistory);
         const aiReply = response.content;
 
-        // --- D. Simpan Percakapan ke Database ---
-        if (userId) {
+        // --- D. Simpan ke Database ---
+        if (userId && sessionId) {
             const messagesToSave = [
                 { session_id: sessionId, message: { role: 'user', content: userMessage } },
                 { session_id: sessionId, message: { role: 'ai', content: aiReply } }
             ];
 
-            const { error: saveError } = await supabase
-                .from('chat_messages')
-                .insert(messagesToSave);
-                
-            if (saveError) console.error("Gagal menyimpan pesan:", saveError.message);
+            await supabase.from('chat_messages').insert(messagesToSave);
         }
 
         return aiReply;
 
     } catch (error) {
         console.error("Error di chatbotService:", error);
-        throw new Error("Gagal memproses pesan dengan AI.");
+        throw new Error("Gagal memproses pesan AI.");
     }
 };
 

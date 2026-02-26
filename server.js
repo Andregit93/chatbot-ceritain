@@ -19,20 +19,23 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+// ==========================================
 // Endpoint Utama untuk Chatbot
+// ==========================================
 app.post('/api/chat', async (req, res) => {
     try {
         // Menerima data dari frontend
-        // Jika guest, userId dan sessionId bisa dikirim null/kosong dari frontend
-        const { sessionId, userId, message } = req.body;
+        const { sessionId, userId, message } = req.body; 
 
-        if (!message) {
+        // 1. Validasi DULU sebelum dilempar ke AI
+        if (!message || message.trim() === "") {
             return res.status(400).json({ error: "Pesan tidak boleh kosong." });
         }
 
-        // Proses chat menggunakan LangChain & Gemini
-        const aiResponse = await processChat(supabase, sessionId, userId, message);
+        // 2. Proses chat (Hanya dipanggil SEKALI, dan parameter dicocokkan dengan chatbotService.js)
+        const aiResponse = await processChat(sessionId, userId, message);
 
+        // 3. Kembalikan balasan ke frontend
         res.status(200).json({ reply: aiResponse });
 
     } catch (error) {
@@ -41,7 +44,9 @@ app.post('/api/chat', async (req, res) => {
     }
 });
 
+// ==========================================
 // Register
+// ==========================================
 app.post('/api/register', async (req, res) => {
     try {
         const { username, email, password } = req.body;
@@ -75,7 +80,9 @@ app.post('/api/register', async (req, res) => {
     }
 });
 
+// ==========================================
 // Login
+// ==========================================
 app.post('/api/login', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -110,7 +117,9 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
-// RIWAYAT CHAT 
+// ==========================================
+// RIWAYAT CHAT
+// ==========================================
 app.get('/api/sessions/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
@@ -130,7 +139,9 @@ app.get('/api/sessions/:userId', async (req, res) => {
     }
 });
 
+// ==========================================
 // Pesan dalam Satu Sesi Khusus
+// ==========================================
 app.get('/api/chat/:sessionId', async (req, res) => {
     try {
         const { sessionId } = req.params;
@@ -150,7 +161,9 @@ app.get('/api/chat/:sessionId', async (req, res) => {
     }
 });
 
+// ==========================================
 // Jalankan Server
+// ==========================================
 app.listen(port, () => {
-    console.log(`Server berjalan di http://localhost:${port}`);
+    console.log(`Server DengarAI berjalan di http://localhost:${port}`);
 });
