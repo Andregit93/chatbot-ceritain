@@ -1,5 +1,5 @@
 // Konfigurasi URL Backend DengarAI
-const API_URL = 'http://localhost:3000/api';
+const API_URL = '/api';
 
 // --- UTILITIES ---
 // Key LocalStorage diubah agar tidak bentrok dengan data ceritAIn sebelumnya
