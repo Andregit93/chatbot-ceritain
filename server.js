@@ -24,18 +24,16 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 // ==========================================
 app.post('/api/chat', async (req, res) => {
     try {
-        // Menerima data dari frontend
-        const { sessionId, userId, message } = req.body; 
+        // Tambahkan 'history' di sini
+        const { sessionId, userId, message, history } = req.body; 
 
-        // 1. Validasi DULU sebelum dilempar ke AI
         if (!message || message.trim() === "") {
             return res.status(400).json({ error: "Pesan tidak boleh kosong." });
         }
 
-        // 2. Proses chat (Hanya dipanggil SEKALI, dan parameter dicocokkan dengan chatbotService.js)
-        const aiResponse = await processChat(sessionId, userId, message);
+        // Lempar 'history' ke dalam processChat
+        const aiResponse = await processChat(sessionId, userId, message, history);
 
-        // 3. Kembalikan balasan ke frontend
         res.status(200).json({ reply: aiResponse });
 
     } catch (error) {

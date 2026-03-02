@@ -131,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // 3. LOGIKA HALAMAN CHAT
     // ==========================================
+    let guestHistory = [];
     if (chatWindow && userInput && btnSend) {
         let currentSessionId = generateSessionId();
 
@@ -209,7 +210,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({
                         sessionId: user ? currentSessionId : null,
                         userId: user ? user.id : null,
-                        message: text
+                        message: text,
+                        history: user ? null : guestHistory
                     })
                 });
                 const data = await res.json();
@@ -217,6 +219,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (res.ok) { 
                     await appendMessage('ai', data.reply, true);
+                    
+                    if (!user) {
+                        guestHistory.push({ role: 'user', content: text });
+                        guestHistory.push({ role: 'ai', content: data.reply });
+                    }
                     
                     if (user) { 
                         const currentSidebarCount = historyList.children.length;

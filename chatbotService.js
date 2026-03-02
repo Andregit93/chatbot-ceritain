@@ -35,7 +35,7 @@ Kamu adalah DengarAI, sebuah asisten virtual empatik dan pendamping kesehatan me
 3. Akhiri balasanmu dengan satu pertanyaan pemantik yang lembut untuk mendorong pengguna bercerita lebih lanjut (contoh: "Pelan-pelan saja, apa yang paling membuatmu merasa berat hari ini?").
 `;
 
-const processChat = async (sessionId, userId, userMessage) => {
+const processChat = async (sessionId, userId, userMessage, guestHistory = []) => {
     try {
         // Validasi Keamanan Lapis Pertama
         if (!userMessage || userMessage.trim() === "") {
@@ -65,6 +65,7 @@ const processChat = async (sessionId, userId, userMessage) => {
         let chatHistory = [new SystemMessage(systemPrompt)];
 
         if (userId && sessionId) {
+            // JIKA LOGIN: Tarik dari Database Supabase (Kodingan aslinya biarkan di sini)
             const { data: pastMessages, error: historyError } = await supabase
                 .from('chat_messages')
                 .select('*')
@@ -76,14 +77,17 @@ const processChat = async (sessionId, userId, userMessage) => {
                 pastMessages.forEach(msg => {
                     const textContent = msg.message?.content || ""; 
                     if (textContent.trim() !== "") {
-                        if (msg.message.role === 'user') {
-                            chatHistory.push(new HumanMessage(textContent));
-                        } else if (msg.message.role === 'ai') {
-                            chatHistory.push(new AIMessage(textContent));
-                        }
+                        if (msg.message.role === 'user') chatHistory.push(new HumanMessage(textContent));
+                        else if (msg.message.role === 'ai') chatHistory.push(new AIMessage(textContent));
                     }
                 });
             }
+        } else if (guestHistory && Array.isArray(guestHistory) && guestHistory.length > 0) {
+            // JIKA GUEST (Belum Login): Gunakan memori sementara dari Frontend
+            guestHistory.forEach(msg => {
+                if (msg.role === 'user') chatHistory.push(new HumanMessage(msg.content));
+                else if (msg.role === 'ai') chatHistory.push(new AIMessage(msg.content));
+            });
         }
 
         // Masukkan pesan terbaru

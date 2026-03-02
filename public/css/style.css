@@ -298,3 +298,38 @@ body {
 
 .text-sec-custom { color: var(--text-sec) !important; }
 .border-bottom-custom { border-bottom: 1px solid var(--border-color) !important; }
+
+/* ==========================================
+   PERBAIKAN SCROLL SIDEBAR HISTORY
+   ========================================== */
+   #historyList {
+    display: flex;
+    flex-direction: column; /* Memaksa riwayat berbaris rapi ke bawah */
+    flex-wrap: nowrap; /* Mencegah elemen meluber atau pindah ke kolom samping */
+    overflow-y: auto; /* Menyalakan scroll vertikal (ke bawah) jika penuh */
+    overflow-x: hidden; /* Mematikan/menyembunyikan scroll horizontal (ke samping) */
+    
+    /* Sesuaikan tinggi maksimal agar scrollbar muncul di dalam area list,
+       bukan membuat seluruh halaman memanjang */
+    max-height: 60vh; 
+    
+    /* Tambahan agar scrollbar tidak menempel terlalu rapat di kanan */
+    padding-right: 5px; 
+}
+
+/* Memastikan setiap tombol history ukurannya pas 100% dari lebar sidebar */
+#historyList .nav-item {
+    width: 100%;
+}
+
+/* Opsional: Mempercantik bentuk scrollbar khusus untuk historyList (bergaya Mac/Modern) */
+#historyList::-webkit-scrollbar {
+    width: 6px;
+}
+#historyList::-webkit-scrollbar-track {
+    background: transparent;
+}
+#historyList::-webkit-scrollbar-thumb {
+    background-color: var(--border-color, #233554);
+    border-radius: 10px;
+}
