@@ -177,6 +177,7 @@ body {
 
     .chat-input-area {
         padding: 12px;
+        padding-bottom: calc(12px + env(safe-area-inset-bottom));
     }
 }
 
@@ -194,16 +195,21 @@ body {
 
 /* Helper Class for 100dvh */
 .min-h-100dvh {
+    min-height: 100vh !important;
     min-height: 100dvh !important;
 }
 
 /* KUNCI PERBAIKAN: Memaksa tinggi layar 100% penuh */
 /* Class KHUSUS untuk mengunci layar di Halaman Chat */
 .chat-body {
-    height: 100dvh;
-    /* Kunci tinggi layar */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
     overflow: hidden;
-    /* Matikan scroll body utama */
+    /* Matikan scroll body utama dan kunci ke viewport HP */
 }
 
 /* Sidebar Kiri */
@@ -296,6 +302,7 @@ body {
     flex-shrink: 0;
     /* Mencegah area input menyusut */
     padding: 20px;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
     background-color: var(--dark-blue-main);
     border-top: 1px solid var(--border-color);
 }
