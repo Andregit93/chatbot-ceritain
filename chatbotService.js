@@ -8,9 +8,9 @@ const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY
 
 // Inisialisasi Model AI (Menggunakan Flash agar ringan & anti limit)
 const llm = new ChatGoogleGenerativeAI({
-    model: "gemini-2.5-flash", 
+    model: "gemini-3.1-flash-lite-preview",
     apiKey: process.env.GEMINI_API_KEY,
-    temperature: 0.7, 
+    temperature: 0.7,
 });
 
 // Super Prompt R.O.L.E Framework
