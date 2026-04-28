@@ -193,13 +193,24 @@ document.addEventListener('DOMContentLoaded', () => {
             const text = userInput.value.trim();
             if (!text) return;
 
+            // Set button ke status loading
+            btnSend.disabled = true;
+            btnSend.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="width: 1.2rem; height: 1.2rem; border-width: 0.15em;"></span>';
+            userInput.disabled = true; // Mencegah pengetikan saat AI memproses
+
             appendMessage('user', text);
             userInput.value = '';
 
             const indicator = document.createElement('div');
             indicator.id = 'loading-ai';
-            indicator.className = 'message-bubble message-ai text-sec-custom small';
-            indicator.innerHTML = '<i class="bi bi-stars"></i> DengarAI sedang memproses cerita kamu...';
+            indicator.className = 'message-bubble message-ai shadow-sm';
+            indicator.innerHTML = `
+                <div class="typing-indicator">
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                </div>
+            `;
             chatWindow.appendChild(indicator);
             chatWindow.scrollTop = chatWindow.scrollHeight;
 
@@ -261,6 +272,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (e) { 
                 if (document.getElementById('loading-ai')) document.getElementById('loading-ai').remove();
+            } finally {
+                // Kembalikan tombol send ke kondisi semula
+                btnSend.disabled = false;
+                btnSend.innerHTML = '<i class="fa-regular fa-paper-plane fs-5"></i>';
+                userInput.disabled = false;
+                userInput.focus();
             }
         };
 
